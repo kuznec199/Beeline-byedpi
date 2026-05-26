@@ -5,8 +5,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone ByeDPI Code
-        run: git clone https://github.com .
+      - name: Checkout ByeDPI Code
+        uses: actions/checkout@v4
+        with:
+          repository: 'hufrea/byedpi'
 
       - name: Install Toolchain
         run: |
@@ -24,3 +26,4 @@ jobs:
         with:
           name: my-ciadpi
           path: output/ciadpi-lexra
+
