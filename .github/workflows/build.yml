@@ -5,10 +5,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout ByeDPI Code
-        uses: actions/checkout@v4
-        with:
-          repository: 'hufrea/byedpi'
+      - name: Download ByeDPI Archive
+        run: |
+          curl -L https://github.com -o byedpi.zip
+          unzip byedpi.zip
+          mv byedpi-master/* .
 
       - name: Install Toolchain
         run: |
@@ -26,4 +27,3 @@ jobs:
         with:
           name: my-ciadpi
           path: output/ciadpi-lexra
-
