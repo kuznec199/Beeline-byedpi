@@ -18,7 +18,7 @@ jobs:
 
       - name: Compile
         run: |
-          make CC=mips-linux-gnu-gcc CFLAGS="-march=mips32 -mtune=mips32 -msoft-float -O2"
+          make CC=mips-linux-gnu-gcc CFLAGS="-march=mips32 -mtune=mips32 -msoft-float -O2" LDFLAGS="-static" TARGET=linux
           mkdir -p output
           mv ciadpi output/ciadpi-lexra
 
