@@ -7,20 +7,23 @@ jobs:
     steps:
       - name: Download ByeDPI Archive
         run: |
-          curl -L "https://github.com/hufrea/byedpi/archive/refs/heads/main.zip" -o byedpi.zip
-          unzip byedpi.zip
           mkdir -p src
-          cp -r byedpi-main/* src/
+          # Скачиваем стабильный tar.gz архив ветки main и распаковываем напрямую в папку src
+          curl -L "https://github.com" -o byedpi.tar.gz
+          tar -xzf byedpi.tar.gz -C src --strip-components=1
 
-      - name: Build via Toolchain
+      - name: Install Toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-mips-linux-gnu
+
+      - name: Compile via Make
+        run: |
           cd src
-          mips-linux-gnu-gcc -march=mips32 -mtune=mips32 -msoft-float -O2 -static -D_GNU_SOURCE *.c -o ciadpi-lexra -lpthread
+          make CC=mips-linux-gnu-gcc TARGET=linux CFLAGS="-march=mips32 -mtune=mips32 -msoft-float -O2" LDFLAGS="-static"
           cd ..
           mkdir -p output
-          mv src/ciadpi-lexra output/
+          mv src/ciadpi output/ciadpi-lexra
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
