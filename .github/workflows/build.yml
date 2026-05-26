@@ -6,29 +6,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clean Environment
-        run: |
-          # Принудительно очищаем папку от остатков старых сборок
-          rm -rf *
+        run: rm -rf *
 
       - name: Download ByeDPI Archive
         run: |
-          mkdir -p src
+          # Скачиваем архив master ветки
           curl -L "https://github.com" -o byedpi.tar.gz
-          tar -xzf byedpi.tar.gz -C src --strip-components=1
+          # Распаковываем всё содержимое во временную папку tmp_src
+          mkdir -p tmp_src
+          tar -xzf byedpi.tar.gz -C tmp_src --strip-components=1
 
       - name: Install Toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-mips-linux-gnu
 
-      - name: Direct Compile All Files
+      - name: Direct Compile
         run: |
-          cd src
-          # Компилируем абсолютно все исходные файлы .c, включая сетевые модули
+          # Проверяем, где лежат .c файлы (в корне или в папке src) и собираем их
+          if [ -d "tmp_src/src" ]; then
+            cd tmp_src/src
+          else
+            cd tmp_src
+          fi
+          
           mips-linux-gnu-gcc -march=mips32 -mtune=mips32 -msoft-float -O2 -static -D_GNU_SOURCE *.c -o ciadpi-lexra -lpthread
-          cd ..
-          mkdir -p output
-          mv src/ciadpi-lexra output/
+          
+          # Переносим готовый файл в корень рабочей директории
+          mkdir -p ../../output
+          mv ciadpi-lexra ../../output/
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
