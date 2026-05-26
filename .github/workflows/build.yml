@@ -1,0 +1,25 @@
+name: Build ciadpi for Lexra
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone ByeDPI Code
+        run: git clone https://github.com/hufrea/byedpi.git .
+
+      - name: Install Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mips-linux-gnu
+
+      - name: Compile
+        run: |
+          make CC=mips-linux-gnu-gcc CFLAGS="-march=mips32 -mtune=mips32 -msoft-float"
+          mv ciadpi ciadpi-lexra
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-ciadpi
+          path: ciadpi-lexra
