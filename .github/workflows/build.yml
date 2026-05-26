@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone ByeDPI Code
-        run: git clone https://github.com/hufrea/byedpi.git .
+        run: git clone https://github.com .
 
       - name: Install Toolchain
         run: |
@@ -15,11 +15,12 @@ jobs:
 
       - name: Compile
         run: |
-          make CC=mips-linux-gnu-gcc CFLAGS="-march=mips32 -mtune=mips32 -msoft-float"
-          mv ciadpi ciadpi-lexra
+          make CC=mips-linux-gnu-gcc CFLAGS="-march=mips32 -mtune=mips32 -msoft-float -O2"
+          mkdir -p output
+          mv ciadpi output/ciadpi-lexra
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
           name: my-ciadpi
-          path: ciadpi-lexra
+          path: output/ciadpi-lexra
