@@ -8,7 +8,6 @@ jobs:
       - name: Download ByeDPI Archive
         run: |
           mkdir -p src
-          # Скачиваем стабильный tar.gz архив ветки main и распаковываем напрямую в папку src
           curl -L "https://github.com" -o byedpi.tar.gz
           tar -xzf byedpi.tar.gz -C src --strip-components=1
 
@@ -17,13 +16,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc-mips-linux-gnu
 
-      - name: Compile via Make
+      - name: Direct Compile
         run: |
           cd src
-          make CC=mips-linux-gnu-gcc TARGET=linux CFLAGS="-march=mips32 -mtune=mips32 -msoft-float -O2" LDFLAGS="-static"
+          # Компилируем напрямую все исходные файлы ядра ByeDPI, принудительно включая многопоточность и статическую линковку
+          mips-linux-gnu-gcc -march=mips32 -mtune=mips32 -msoft-float -O2 -static -D_GNU_SOURCE conev.c error.c main.c packets.c params.c proxy.c -o ciadpi-lexra -lpthread
           cd ..
           mkdir -p output
-          mv src/ciadpi output/ciadpi-lexra
+          mv src/ciadpi-lexra output/
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
