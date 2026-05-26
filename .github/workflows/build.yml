@@ -5,25 +5,41 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Download ByeDPI Archive
-        run: |
-          mkdir -p src
-          curl -L "https://github.com" -o byedpi.tar.gz
-          tar -xzf byedpi.tar.gz -C src --strip-components=1
-
-      - name: Install Toolchain
+      - name: Install Toolchain and Packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-mips-linux-gnu
+          sudo apt-get install -y build-essential libncurses5-dev gawk git gettext libssl-dev xsltproc wget unzip python3
 
-      - name: Direct Compile
+      - name: Clone OpenWrt Build System
         run: |
-          cd src
-          # Компилируем напрямую все исходные файлы ядра ByeDPI, принудительно включая многопоточность и статическую линковку
-          mips-linux-gnu-gcc -march=mips32 -mtune=mips32 -msoft-float -O2 -static -D_GNU_SOURCE conev.c error.c main.c packets.c params.c proxy.c -o ciadpi-lexra -lpthread
-          cd ..
+          # Клонируем официальную систему сборки OpenWrt
+          git clone --depth 1 https://github.com
+          cd openwrt
+          # Добавляем репозиторий пакетов сообщества, где есть ByeDPI
+          echo "src-git packages https://github.com" > feeds.conf
+          ./scripts/feeds update -a
+          ./scripts/feeds install byedpi
+
+      - name: Configure Target Architecture
+        run: |
+          cd openwrt
+          # Жестко задаем архитектуру Realtek (Lexra)
+          echo "CONFIG_TARGET_realtek=y" > .config
+          echo "CONFIG_TARGET_realtek_generic=y" >> .config
+          echo "CONFIG_PACKAGE_byedpi=y" >> .config
+          make defconfig
+
+      - name: Compile ByeDPI Package
+        run: |
+          cd openwrt
+          # Компилируем конкретно пакет byedpi
+          make package/byedpi/compile V=s
+
+      - name: Find and Prepare Binary
+        run: |
           mkdir -p output
-          mv src/ciadpi-lexra output/
+          # Ищем скомпилированный бинарник ciadpi внутри структуры сборки
+          find openwrt/build_dir/ -name "ciadpi" -type f -exec cp {} output/ciadpi-lexra \;
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
