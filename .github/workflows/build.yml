@@ -7,9 +7,9 @@ jobs:
     steps:
       - name: Download ByeDPI Archive
         run: |
-          curl -L https://github.com -o byedpi.zip
+          curl -L https://github.com/hufrea/byedpi/archive/refs/heads/main.zip -o byedpi.zip
           unzip byedpi.zip
-          mv byedpi-master/* .
+          mv byedpi-main/* .
 
       - name: Install Toolchain
         run: |
