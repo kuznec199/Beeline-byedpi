@@ -40,6 +40,6 @@ This build is customized for the **Lexra** hardware architecture (modified MIPS,
 
 ## ℹ️ Sources and Credits
 This project is a custom build of the original **ByeDPI** tool.
-* Original project source code: [hresrcc/ByeDPI](https://github.com)
+* Original project source code: [hresrcc/ByeDPI](https://github.com/hufrea/byedpi)
 
 
