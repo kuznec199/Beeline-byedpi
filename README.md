@@ -1,45 +1,45 @@
 # Beeline Smart Box N300 — ByeDPI Binary (Lexra Architecture)
 
-Скомпилированный бинарный файл **ByeDPI** для легендарного роутера **Beeline Smart Box N300** (а также других ревизий Smart Box на чипсетах Realtek). 
+Compiled **ByeDPI** binary file for the legendary **Beeline Smart Box N300** router (as well as other Smart Box revisions based on Realtek chipsets). 
 
-Данная сборка предназначена для аппаратной архитектуры **Lexra** (модифицированный MIPS, чипсет Realtek RTL8196E / RTL8197G и аналогичные) для работы на уровне домашнего роутера.
-
----
-
-## 🔍 Ключевые особенности / Оптимизация (SEO)
-* **Совместимость**: Beeline Smart Box N300, Smart Box One (в зависимости от ревизии).
-* **Специфика сборки**: Скомпилировано с учетом особенностей старых ядер Linux и специфических наборов инструкций процессоров Realtek/Lexra.
-* **Стабильность**: Исправлены критические проблемы вылета (startup failure) после жесткой перезагрузки устройства и зависания (freezing) при долгой непрерывной работе.
+This build is customized for the **Lexra** hardware architecture (modified MIPS, Realtek RTL8196E / RTL8197G, and similar chipsets) to operate directly on your home router.
 
 ---
 
-## 🚀 Установка и запуск
+## 🔍 Key Features / Optimization (SEO)
+* **Compatibility**: Beeline Smart Box N300, Smart Box One (depending on the revision).
+* **Build Specifications**: Compiled taking into account the limitations of older Linux kernels and the specific instruction sets of Realtek/Lexra processors.
+* **Stability**: Fixed critical startup failure issues following a hard reboot of the device and process freezing/hanging during prolonged continuous operation.
 
-1. Скачайте свежий бинарный файл из раздела **Releases** https://github.com/kuznec199/Beeline-byedpi/releases
-2. Загрузите файл на роутер (в папку `/tmp` или на подключенную флешку, если используется кастомная прошивка типа OpenWrt/Padavan/Keenetic).
-3. Выдайте права на запуск:
+---
+
+## 🚀 Installation and Usage
+
+1. Download the latest binary file from the **Releases** section: https://github.com/kuznec199/Beeline-byedpi/releases
+2. Upload the file to your router (into the `/tmp` directory or onto a connected USB flash drive if using custom firmware like OpenWrt / Padavan / Keenetic).
+3. Grant execution permissions to the file:
    ```bash
    chmod +x byedpi-lexra
    ```
-4. Запустите ByeDPI с необходимыми параметрами (пример базового запуска):
+4. Run ByeDPI with the required parameters (basic working example):
    ```bash
    ./byedpi-lexra --disorder 1 --split 2 --ttl 4
    ```
 
 ---
 
-## 📝 Список изменений (Changelog)
+## 📝 Changelog
 
-### Версия 1.1.0
+### Version 1.1.0
 * **English**:
   - Fixed a startup issue after a hard reboot.
   - Fixed freezing during prolonged operation.
-* **Русский**:
-  - Исправлена проблема запуска службы после жесткой перезагрузки роутера.
-  - Исправлено намертво зависание процесса при долгой непрерывной работе под нагрузкой.
+
  
-  - ---
-## ℹ️ Источники и благодарности
-Проект является сборкой оригинального инструмента **ByeDPI**. 
-* Исходный код оригинального проекта: [hresrcc/ByeDPI](https://github.com)
+---
+
+## ℹ️ Sources and Credits
+This project is a custom build of the original **ByeDPI** tool.
+* Original project source code: [hresrcc/ByeDPI](https://github.com)
+
 
